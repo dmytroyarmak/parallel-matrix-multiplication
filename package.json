@@ -4,7 +4,7 @@
   "description": "Implementation of parallel matrix multiplication by using WebWorkers",
   "main": "src/parallel-matrix-multiplication.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/karma/bin/karma start"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/dmytroyarmak/parallel-matrix-multiplication/issues"
   },
-  "homepage": "https://github.com/dmytroyarmak/parallel-matrix-multiplication#readme"
+  "homepage": "https://github.com/dmytroyarmak/parallel-matrix-multiplication#readme",
+  "devDependencies": {
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.6"
+  }
 }
