@@ -54,4 +54,23 @@ describe('ParallelMatrixMultiplication', function() {
       });
     });
   });
+
+  describe('generate', function() {
+    it('is a function', function() {
+      expect(window.ParallelMatrixMultiplication.generate).toEqual(jasmine.any(Function));
+    });
+
+    it('returns matrix that has passed size and random values', function () {
+      var matrix = window.ParallelMatrixMultiplication.generate(4, 6);
+      expect(matrix.length).toBe(4);
+
+      matrix.forEach(function(row) {
+        expect(row.length).toBe(6);
+
+        row.forEach(function(value) {
+          expect(value).toEqual(jasmine.any(Number));
+        });
+      });
+    });
+  });
 });

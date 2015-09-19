@@ -2,7 +2,8 @@
 	'use strict';
 
 	var ParallelMatrixMultiplication = {
-		product: product
+		product: product,
+    generate: generate
 	};
 
 	function product (matrixA, matrixB) {
@@ -32,6 +33,12 @@
 		return result;
 	}
 
+  function generate (rows, cols) {
+    return _createMatrix(rows, cols, function() {
+      return Math.random();
+    });
+  }
+
 	function _getNumberOfRows (matrix) {
 		return matrix.length;
 	}
@@ -40,9 +47,11 @@
 		return matrix[0].length;
 	}
 
-	function _createMatrix (rows, cols) {
+	function _createMatrix (rows, cols, valueFactory) {
 		return new Array(rows).fill(null).map(function() {
-			return new Array(cols).fill(null);
+			return new Array(cols).fill(null).map(function() {
+        return valueFactory? valueFactory() : null;
+      });
 		});
 	}
 
