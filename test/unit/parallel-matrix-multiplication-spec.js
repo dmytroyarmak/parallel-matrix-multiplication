@@ -73,4 +73,46 @@ describe('ParallelMatrixMultiplication', function() {
       });
     });
   });
+
+  describe('createArrayBufferFromMatrix', function() {
+    it('is a function', function() {
+      expect(window.ParallelMatrixMultiplication.createArrayBufferFromMatrix).toEqual(jasmine.any(Function));
+    });
+
+    describe('for matrix [[7, 8], [9, 10], [11, 12]]', function() {
+      var result;
+
+      beforeEach(function() {
+        result = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([[7, 8], [9, 10], [11, 12]]);
+      });
+
+      it('returns ArrayBuffer', function() {
+        expect(result).toEqual(jasmine.any(ArrayBuffer));
+      });
+
+      it('returns ArrayBuffer with correct length', function() {
+        expect(result.byteLength).toBe(Uint32Array.BYTES_PER_ELEMENT * 2 + Float64Array.BYTES_PER_ELEMENT*6);
+      });
+
+      it('returns ArrayBuffer with correct rows', function() {
+        var size = new Uint32Array(result, 0, 2);
+        expect(size[0]).toBe(3);
+      });
+
+      it('returns ArrayBuffer with correct cols', function() {
+        var size = new Uint32Array(result, 0, 2);
+        expect(size[1]).toBe(2);
+      });
+
+      it('returns ArrayBuffer with correct values', function() {
+        var values = new Float64Array(result, 8, 6);
+        expect(values[0]).toBe(7);
+        expect(values[1]).toBe(8);
+        expect(values[2]).toBe(9);
+        expect(values[3]).toBe(10);
+        expect(values[4]).toBe(11);
+        expect(values[5]).toBe(12);
+      });
+    });
+  });
 });

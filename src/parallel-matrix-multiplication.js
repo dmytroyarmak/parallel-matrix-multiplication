@@ -3,7 +3,8 @@
 
 	var ParallelMatrixMultiplication = {
 		product: product,
-    generate: generate
+    generate: generate,
+    createArrayBufferFromMatrix: createArrayBufferFromMatrix
 	};
 
 	function product (matrixA, matrixB) {
@@ -37,6 +38,27 @@
     return _createMatrix(rows, cols, function() {
       return Math.random();
     });
+  }
+
+  function createArrayBufferFromMatrix (matrix) {
+    var rows = _getNumberOfRows(matrix);
+    var cols = _getNumberOfCols(matrix);
+    var numberOfValues = rows * cols;
+    var row;
+    var col;
+    var bufferLength = Uint32Array.BYTES_PER_ELEMENT * 2 + Float64Array.BYTES_PER_ELEMENT * numberOfValues;
+    var buffer = new ArrayBuffer(bufferLength);
+    var size = new Uint32Array(buffer, 0, 2);
+    var values = new Float64Array(buffer, 8, numberOfValues);
+    size[0] = rows;
+    size[1] = cols;
+
+    for (row = 0; row < rows; row += 1) {
+      for (col = 0; col < cols; col += 1) {
+        values[row*cols + col] = matrix[row][col];
+      }
+    }
+    return buffer;
   }
 
 	function _getNumberOfRows (matrix) {
