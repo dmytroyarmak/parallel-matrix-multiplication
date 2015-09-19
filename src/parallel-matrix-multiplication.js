@@ -10,11 +10,16 @@
 		var matrixACols = _getNumberOfCols(matrixA);
 		var matrixBRows = _getNumberOfRows(matrixB);
 		var matrixBCols = _getNumberOfCols(matrixB);
-		var result = _createMatrix(matrixARows, matrixBCols);
+		var result;
 		var matrixARow;
 		var matrixBCol;
 		var resultCell;
 		var i;
+    if (matrixACols !== matrixBRows) {
+      throw new Error('Columns of first matrix should match rows of second matrix');
+    }
+    result = _createMatrix(matrixARows, matrixBCols);
+
 		for (matrixARow = 0; matrixARow < matrixARows; matrixARow += 1) {
 			for (matrixBCol = 0; matrixBCol < matrixBCols; matrixBCol += 1) {
 				resultCell = 0;
