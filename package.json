@@ -1,0 +1,19 @@
+{
+  "name": "parallel-matrix-multiplication",
+  "version": "0.0.1",
+  "description": "Implementation of parallel matrix multiplication by using WebWorkers",
+  "main": "src/parallel-matrix-multiplication.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmytroyarmak/parallel-matrix-multiplication.git"
+  },
+  "author": "Dmytro Yarmak <dmytroyarmak@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dmytroyarmak/parallel-matrix-multiplication/issues"
+  },
+  "homepage": "https://github.com/dmytroyarmak/parallel-matrix-multiplication#readme"
+}
