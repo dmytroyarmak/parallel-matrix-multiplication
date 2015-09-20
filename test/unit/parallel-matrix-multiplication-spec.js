@@ -10,44 +10,58 @@ describe('ParallelMatrixMultiplication', function() {
 
     describe('for matrices nxm and mxp', function() {
       it('calculate product when n = p and n < m', function() {
-        var matrixA = [
+        var matrixA = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([
           [1, 2, 3],
           [4, 5, 6]
-        ];
-        var matrixB = [
+        ]);
+        var matrixB = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([
           [7, 8],
           [9, 10],
           [11, 12]
-        ];
-        var expectedResult = [
-          [58, 64],
-          [139, 154]
-        ];
-        var actualResult = window.ParallelMatrixMultiplication.product(matrixA, matrixB);
-        expect(actualResult).toEqual(expectedResult);
+        ]);
+        var result = window.ParallelMatrixMultiplication.product(matrixA, matrixB);
+        var size = new Uint32Array(result, 0, 2);
+        var values = new Float64Array(result, 8, 4);
+        expect(size[0]).toBe(2);
+        expect(size[1]).toBe(2);
+        expect(values[0]).toBe(58);
+        expect(values[1]).toBe(64);
+        expect(values[2]).toBe(139);
+        expect(values[3]).toBe(154);
       });
 
       it('calculate product when n != p, n < m and m < p', function() {
-        var matrixA = [
+        var matrixA = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([
           [1, 2, 3],
           [4, 5, 6]
-        ];
-        var matrixB = [
+        ]);
+        var matrixB = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([
           [ 7,  8,  9, 10],
           [11, 12, 13, 14],
           [15, 16, 17, 18]
-        ];
-        var expectedResult = [
+        ]);
+        var expectedResult = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([
           [ 74,  80,  86,  92],
           [173, 188, 203, 218]
-        ];
-        var actualResult = window.ParallelMatrixMultiplication.product(matrixA, matrixB);
-        expect(actualResult).toEqual(expectedResult);
+        ]);
+        var result = window.ParallelMatrixMultiplication.product(matrixA, matrixB);
+        var size = new Uint32Array(result, 0, 2);
+        var values = new Float64Array(result, 8, 8);
+        expect(size[0]).toBe(2);
+        expect(size[1]).toBe(4);
+        expect(values[0]).toBe(74);
+        expect(values[1]).toBe(80);
+        expect(values[2]).toBe(86);
+        expect(values[3]).toBe(92);
+        expect(values[4]).toBe(173);
+        expect(values[5]).toBe(188);
+        expect(values[6]).toBe(203);
+        expect(values[7]).toBe(218);
       });
 
       it('throws error when columns of matrix A does not match rows of matrix B', function() {
-        var matrixA = [[1, 2], [3, 4]];
-        var matrixB = [[7, 8], [9, 10], [11, 12]];
+        var matrixA = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([[1, 2], [3, 4]]);
+        var matrixB = window.ParallelMatrixMultiplication.createArrayBufferFromMatrix([[7, 8], [9, 10], [11, 12]]);
         expect(function() {
           window.ParallelMatrixMultiplication.product(matrixA, matrixB);
         }).toThrowError('Columns of first matrix should match rows of second matrix');
@@ -62,15 +76,11 @@ describe('ParallelMatrixMultiplication', function() {
 
     it('returns matrix that has passed size and random values', function () {
       var matrix = window.ParallelMatrixMultiplication.generate(4, 6);
-      expect(matrix.length).toBe(4);
-
-      matrix.forEach(function(row) {
-        expect(row.length).toBe(6);
-
-        row.forEach(function(value) {
-          expect(value).toEqual(jasmine.any(Number));
-        });
-      });
+      var size = new Uint32Array(matrix, 0, 2);
+      var values = new Float64Array(matrix, 8, 24);
+      expect(matrix.byteLength).toBe(Uint32Array.BYTES_PER_ELEMENT * 2 + Float64Array.BYTES_PER_ELEMENT * 24);
+      expect(size[0]).toBe(4);
+      expect(size[1]).toBe(6);
     });
   });
 

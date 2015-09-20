@@ -1,48 +1,69 @@
 (function(window) {
-	'use strict';
+  'use strict';
 
-	var ParallelMatrixMultiplication = {
-		product: product,
+  var ParallelMatrixMultiplication = {
+    product: product,
     generate: generate,
     createArrayBufferFromMatrix: createArrayBufferFromMatrix
-	};
+  };
 
-	function product (matrixA, matrixB) {
-		var matrixARows = _getNumberOfRows(matrixA);
-		var matrixACols = _getNumberOfCols(matrixA);
-		var matrixBRows = _getNumberOfRows(matrixB);
-		var matrixBCols = _getNumberOfCols(matrixB);
-		var result;
-		var matrixARow;
-		var matrixBCol;
-		var resultCell;
-		var i;
+  function product (matrixA, matrixB) {
+    var matrixASize = new Uint32Array(matrixA, 0 , 2);
+    var matrixARows = matrixASize[0];
+    var matrixACols = matrixASize[1];
+    var matrixAValues = new Float64Array(matrixA, 8 , matrixARows * matrixACols);
+    var matrixBSize = new Uint32Array(matrixB, 0 , 2);
+    var matrixBRows = matrixBSize[0];
+    var matrixBCols = matrixBSize[1];
+    var matrixBValues = new Float64Array(matrixB, 8 , matrixBRows * matrixBCols);
+    var result;
+    var resultSize;
+    var resultValues;
+    var matrixARow;
+    var matrixBCol;
+    var resultCell;
+    var i;
     if (matrixACols !== matrixBRows) {
       throw new Error('Columns of first matrix should match rows of second matrix');
     }
-    result = _createMatrix(matrixARows, matrixBCols);
+    result = new ArrayBuffer(Uint32Array.BYTES_PER_ELEMENT * 2 + Float64Array.BYTES_PER_ELEMENT * matrixARows * matrixBCols);
+    resultSize = new Uint32Array(result, 0 , 2);
+    resultValues = new Float64Array(result, 8, matrixARows * matrixBCols);
 
-		for (matrixARow = 0; matrixARow < matrixARows; matrixARow += 1) {
-			for (matrixBCol = 0; matrixBCol < matrixBCols; matrixBCol += 1) {
-				resultCell = 0;
-				for (i = 0; i < matrixACols; i += 1) {
-					resultCell += matrixA[matrixARow][i] * matrixB[i][matrixBCol];
-				}
-				result[matrixARow][matrixBCol] = resultCell;
-			}
-		}
-		return result;
-	}
+    resultSize[0] = matrixARows;
+    resultSize[1] = matrixBCols;
+
+    for (matrixARow = 0; matrixARow < matrixARows; matrixARow += 1) {
+      for (matrixBCol = 0; matrixBCol < matrixBCols; matrixBCol += 1) {
+        resultCell = 0;
+        for (i = 0; i < matrixACols; i += 1) {
+          resultCell += matrixAValues[matrixARow * matrixACols + i] * matrixBValues[i * matrixBCols + matrixBCol];
+        }
+        resultValues[matrixARow * matrixBCols + matrixBCol] = resultCell;
+      }
+    }
+    return result;
+  }
 
   function generate (rows, cols) {
-    return _createMatrix(rows, cols, function() {
-      return Math.random();
-    });
+    var numberOfValues = rows * cols;
+    var matrix = new ArrayBuffer(Uint32Array.BYTES_PER_ELEMENT * 2 + Float64Array.BYTES_PER_ELEMENT * numberOfValues);
+    var size = new Uint32Array(matrix, 0 , 2);
+    var values = new Float64Array(matrix, 8, numberOfValues);
+    var i;
+    size[0] = rows;
+    size[1] = cols;
+
+    for(i = 0; i < numberOfValues; i += 1) {
+      values[i] = Math.random();
+    }
+
+    return matrix;
   }
 
   function createArrayBufferFromMatrix (matrix) {
-    var rows = _getNumberOfRows(matrix);
-    var cols = _getNumberOfCols(matrix);
+    var rows = matrix.length;
+    var cols = matrix[0].length;
     var numberOfValues = rows * cols;
     var row;
     var col;
@@ -61,21 +82,5 @@
     return buffer;
   }
 
-	function _getNumberOfRows (matrix) {
-		return matrix.length;
-	}
-
-	function _getNumberOfCols (matrix) {
-		return matrix[0].length;
-	}
-
-	function _createMatrix (rows, cols, valueFactory) {
-		return new Array(rows).fill(null).map(function() {
-			return new Array(cols).fill(null).map(function() {
-        return valueFactory? valueFactory() : null;
-      });
-		});
-	}
-
-	window.ParallelMatrixMultiplication = ParallelMatrixMultiplication;
+  window.ParallelMatrixMultiplication = ParallelMatrixMultiplication;
 }(window));
