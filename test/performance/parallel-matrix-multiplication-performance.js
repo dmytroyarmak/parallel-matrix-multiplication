@@ -9,11 +9,11 @@
   var bench = new Benchmark('Matrix multiplication (100x100)', {
     async: true,
     setup: function() {
-      var matrixA = ParallelMatrixMultiplication.generate(100, 100);
-      var matrixB = ParallelMatrixMultiplication.generate(100, 100);
+      var matrixA = ParallelMatrixMultiplication.generate(100);
+      var matrixB = ParallelMatrixMultiplication.generate(100);
     },
     fn: function() {
-      ParallelMatrixMultiplication.product(matrixA, matrixB);
+      ParallelMatrixMultiplication.product(matrixA, matrixB, 100);
     },
     onCycle:function(e) {
       printToOutputNode('onCycle: ' + String(e.target));
