@@ -6,17 +6,14 @@
     outputNode.textContent += '\n' + text;
   };
 
-  var bench = new Benchmark('Parallel matrix multiplication (size: 100)', {
+  var bench = new Benchmark('Matrix multiplication (size: 100)', {
     async: true,
-    defer: true,
     setup: function() {
       var matrixA = MatrixMultiplication.generate(100);
       var matrixB = MatrixMultiplication.generate(100);
     },
-    fn: function(deferred) {
-      ParallelMatrixMultiplication.productParallel(matrixA, matrixB, 100).then(function() {
-        deferred.resolve();
-      });
+    fn: function() {
+      MatrixMultiplication.product(matrixA, matrixB, 100);
     },
     onCycle:function(e) {
       printToOutputNode('onCycle: ' + String(e.target));

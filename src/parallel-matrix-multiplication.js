@@ -1,40 +1,37 @@
-(function(window) {
+(function(root) {
   'use strict';
 
   var ParallelMatrixMultiplication = {
-    product: product,
-    generate: generate
+    productParallel: productParallel
   };
 
-  function product (matrixA, matrixB, size) {
-    var i, j, k;
-    var result = new Float64Array(size * size);
-    var resultCell;
+  var worker;
 
-    for (i = 0; i < size; i += 1) {
-      for (j = 0; j < size; j += 1) {
-        resultCell = 0;
-        for (k = 0; k < size; k += 1) {
-          resultCell += matrixA[i * size + k] * matrixB[k * size + j];
-        }
-        result[i * size + j] = resultCell;
-      }
-    }
+  function productParallel (matrixA, matrixB, size) {
+    initWorker();
+    return new Promise(function(resolve, reject) {
 
-    return result;
+      worker.onmessage = function(e) {
+        resolve(e.data);
+      };
+
+      worker.onerror = function(e) {
+        reject(e);
+      };
+
+      worker.postMessage({
+        matrixA: matrixA,
+        matrixB: matrixB,
+        size: size
+      });
+    });
   }
 
-  function generate (size) {
-    var numberOfValues = size * size;
-    var matrix = new Float64Array(numberOfValues);
-    var i;
-
-    for(i = 0; i < numberOfValues; i += 1) {
-      matrix[i] = Math.random();
+  function initWorker () {
+    if (!worker) {
+      worker = new Worker('/src/parallel-matrix-multiplication-worker.js');
     }
-
-    return matrix;
   }
 
-  window.ParallelMatrixMultiplication = ParallelMatrixMultiplication;
-}(window));
+  root.ParallelMatrixMultiplication = ParallelMatrixMultiplication;
+}(this));
