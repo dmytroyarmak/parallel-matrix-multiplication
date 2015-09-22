@@ -6,14 +6,14 @@
     outputNode.textContent += '\n' + text;
   };
 
-  var bench = new Benchmark('Matrix multiplication (size: 100)', {
+  var bench = new Benchmark('Matrix multiplication (size: 1000)', {
     async: true,
     setup: function() {
-      var matrixA = MatrixMultiplication.generate(100);
-      var matrixB = MatrixMultiplication.generate(100);
+      var matrixA = MatrixMultiplication.generate(1000);
+      var matrixB = MatrixMultiplication.generate(1000);
     },
     fn: function() {
-      MatrixMultiplication.product(matrixA, matrixB, 100);
+      MatrixMultiplication.product(matrixA, matrixB, 1000);
     },
     onCycle:function(e) {
       printToOutputNode('onCycle: ' + String(e.target));

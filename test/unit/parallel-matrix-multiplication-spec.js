@@ -13,16 +13,18 @@ describe('ParallelMatrixMultiplication', function() {
 
       beforeEach(function() {
         var matrixA = Float64Array.from([
-          1, 2, 3,
-          4, 5, 6,
-          7, 8, 9
+           1,  2,  3,  4,
+           5,  6,  7,  8,
+           9, 10, 11, 12,
+          13, 14, 15, 16
         ]);
         var matrixB = Float64Array.from([
-          10, 11, 12,
-          13, 14, 15,
-          16, 17, 18
+          17, 18, 19, 20,
+          21, 22, 23, 24,
+          25, 26, 27, 28,
+          29, 30, 31, 32
         ]);
-        resultPromise = window.ParallelMatrixMultiplication.productParallel(matrixA, matrixB, 3);
+        resultPromise = window.ParallelMatrixMultiplication.productParallel(matrixA, matrixB, 4);
       });
 
       it('returns promise', function() {
@@ -40,16 +42,23 @@ describe('ParallelMatrixMultiplication', function() {
 
         it('calculate product when n = p and n < m', function() {
           expect(result).toEqual(jasmine.any(Float64Array));
-          expect(result.length).toBe(9);
-          expect(result[0]).toBe(84);
-          expect(result[1]).toBe(90);
-          expect(result[2]).toBe(96);
-          expect(result[3]).toBe(201);
-          expect(result[4]).toBe(216);
-          expect(result[5]).toBe(231);
-          expect(result[6]).toBe(318);
-          expect(result[7]).toBe(342);
-          expect(result[8]).toBe(366);
+          expect(result.length).toBe(16);
+          expect(result[0]).toBe(250);
+          expect(result[1]).toBe(260);
+          expect(result[2]).toBe(270);
+          expect(result[3]).toBe(280);
+          expect(result[4]).toBe(618);
+          expect(result[5]).toBe(644);
+          expect(result[6]).toBe(670);
+          expect(result[7]).toBe(696);
+          expect(result[8]).toBe(986);
+          expect(result[9]).toBe(1028);
+          expect(result[10]).toBe(1070);
+          expect(result[11]).toBe(1112);
+          expect(result[12]).toBe(1354);
+          expect(result[13]).toBe(1412);
+          expect(result[14]).toBe(1470);
+          expect(result[15]).toBe(1528);
         });
       });
     });

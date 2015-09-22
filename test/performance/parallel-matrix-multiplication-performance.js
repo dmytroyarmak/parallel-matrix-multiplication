@@ -6,15 +6,15 @@
     outputNode.textContent += '\n' + text;
   };
 
-  var bench = new Benchmark('Parallel matrix multiplication (size: 100)', {
+  var bench = new Benchmark('Parallel matrix multiplication (size: 1000)', {
     async: true,
     defer: true,
     setup: function() {
-      var matrixA = MatrixMultiplication.generate(100);
-      var matrixB = MatrixMultiplication.generate(100);
+      var matrixA = MatrixMultiplication.generate(1000);
+      var matrixB = MatrixMultiplication.generate(1000);
     },
     fn: function(deferred) {
-      ParallelMatrixMultiplication.productParallel(matrixA, matrixB, 100).then(function() {
+      ParallelMatrixMultiplication.productParallel(matrixA, matrixB, 1000).then(function() {
         deferred.resolve();
       });
     },

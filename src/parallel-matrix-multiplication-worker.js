@@ -4,6 +4,8 @@ onmessage = function(e) {
   var matrixA = e.data.matrixA;
   var matrixB = e.data.matrixB;
   var size = e.data.size;
-  var result = MatrixMultiplication.product(matrixA, matrixB, size);
+  var p = e.data.p;
+  var n = e.data.n;
+  var result = MatrixMultiplication.product(matrixA, matrixB, size, p, n);
   postMessage(result);
 };
