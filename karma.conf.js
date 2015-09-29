@@ -17,6 +17,7 @@ module.exports = function(config) {
       {pattern: 'src/matrix-multiplication.js', watched: true, included: true, served: true},
       {pattern: 'src/parallel-matrix-multiplication.js', watched: true, included: true, served: true},
       {pattern: 'src/parallel-matrix-multiplication-worker.js', watched: true, included: false, served: true},
+      {pattern: 'src/parallel-matrix-multiplication-in-buffer-worker.js', watched: true, included: false, served: true},
       {pattern: 'src/parallel-matrix-multiplication.js', watched: true, included: true, served: true},
       'test/unit/*-spec.js'
     ],
@@ -62,7 +63,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['FirefoxNightly'],
 
 
     // Continuous Integration mode

@@ -6,6 +6,7 @@ onmessage = function(e) {
   var size = e.data.size;
   var p = e.data.p;
   var n = e.data.n;
-  var result = MatrixMultiplication.product(matrixA, matrixB, size, p, n);
+  var result = new Float64Array((size * size) / n);
+  MatrixMultiplication.product(matrixA, matrixB, result, size, p, n);
   postMessage(result);
 };
