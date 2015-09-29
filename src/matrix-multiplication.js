@@ -3,17 +3,19 @@
 
   var MatrixMultiplication = {
     product: product,
-    productInBuffer: productInBuffer,
-    generate: generate,
-    generateBuffer: generateBuffer
+    generate: generate
   };
 
-  function product (matrixA, matrixB, result, size, p, n) {
+  function product (buffer, size, p, n) {
     p = p || 0;
     n = n || 1;
     var i, j, k;
     var iStart = p * size / n;
     var iEnd = (p + 1) * size / n;
+    var matrixSize = size * size;
+    var matrixA = new Float64Array(buffer, 0, matrixSize);
+    var matrixB = new Float64Array(buffer, matrixA.byteLength , matrixSize);
+    var result = new Float64Array(buffer, matrixA.byteLength + matrixB.byteLength, matrixSize);
     var resultCell;
 
     for (i = iStart; i < iEnd; i += 1) {
@@ -27,27 +29,7 @@
     }
   }
 
-  function productInBuffer (buffer, size, p, n) {
-    var matrixSize = size * size;
-    var matrixA = new Float64Array(buffer, 0, matrixSize);
-    var matrixB = new Float64Array(buffer, matrixA.byteLength , matrixSize);
-    var result = new Float64Array(buffer, matrixA.byteLength + matrixB.byteLength, matrixSize);
-    product(matrixA, matrixB, result, size, p, n);
-  }
-
   function generate (size) {
-    var numberOfValues = size * size;
-    var matrix = new Float64Array(numberOfValues);
-    var i;
-
-    for(i = 0; i < numberOfValues; i += 1) {
-      matrix[i] = Math.random();
-    }
-
-    return matrix;
-  }
-
-  function generateBuffer (size) {
     var numberOfValuesInMatrix = size * size;
     var numberOfValuesToGenerate = numberOfValuesInMatrix * 2;
     var matrix = new Float64Array(numberOfValuesInMatrix * 3);

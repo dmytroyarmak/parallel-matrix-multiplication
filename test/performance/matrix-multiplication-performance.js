@@ -9,12 +9,10 @@
   var bench = new Benchmark('Matrix multiplication (size: 100)', {
     async: true,
     setup: function() {
-      var matrixA = MatrixMultiplication.generate(100);
-      var matrixB = MatrixMultiplication.generate(100);
-      var result = new Float64Array(100 * 100);
+      var buffer = MatrixMultiplication.generate(100);
     },
     fn: function() {
-      MatrixMultiplication.product(matrixA, matrixB, result, 100);
+      MatrixMultiplication.product(buffer, 100);
     },
     onCycle:function(e) {
       printToOutputNode('onCycle: ' + String(e.target));
