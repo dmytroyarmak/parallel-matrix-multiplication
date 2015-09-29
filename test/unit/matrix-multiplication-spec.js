@@ -13,21 +13,21 @@ describe('MatrixMultiplication', function() {
       var result;
 
       beforeEach(function() {
-        var matrixA = [
+        var sharedArray = new SharedFloat64Array(16 * 3);
+        sharedArray.set([
            1,  2,  3,  4,
            5,  6,  7,  8,
            9, 10, 11, 12,
           13, 14, 15, 16
-        ];
-        var matrixB = [
+        ]);
+        sharedArray.set([
           17, 18, 19, 20,
           21, 22, 23, 24,
           25, 26, 27, 28,
           29, 30, 31, 32
-        ];
-        var resultOffset = (matrixA.length + matrixB.length) * Float64Array.BYTES_PER_ELEMENT;
-        buffer = Float64Array.from(matrixA.concat(matrixB, new Array(16).fill(0))).buffer;
-        result = new Float64Array(buffer, resultOffset, 16);
+        ], 16);
+        buffer = sharedArray.buffer;
+        result = new SharedFloat64Array(buffer, 32 * SharedFloat64Array.BYTES_PER_ELEMENT, 16);
       });
 
       it('calculate product when n = p and n < m', function() {
@@ -139,7 +139,7 @@ describe('MatrixMultiplication', function() {
 
     it('returns buffer with 3 matrices that has passed size and random values', function () {
       var result = window.MatrixMultiplication.generate(3);
-      expect(result).toEqual(jasmine.any(ArrayBuffer));
+      expect(result).toEqual(jasmine.any(SharedArrayBuffer));
       expect(result.byteLength).toBe(3 * 3 * 3 * 8);
     });
   });

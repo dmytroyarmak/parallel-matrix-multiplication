@@ -12,19 +12,20 @@ describe('ParallelMatrixMultiplication', function() {
       var resultPromise;
 
       beforeEach(function() {
-        var matrixA = [
+        var sharedArray = new SharedFloat64Array(16 * 3);
+        sharedArray.set([
            1,  2,  3,  4,
            5,  6,  7,  8,
            9, 10, 11, 12,
           13, 14, 15, 16
-        ];
-        var matrixB = [
+        ]);
+        sharedArray.set([
           17, 18, 19, 20,
           21, 22, 23, 24,
           25, 26, 27, 28,
           29, 30, 31, 32
-        ];
-        buffer = Float64Array.from(matrixA.concat(matrixB, new Array(16).fill(0))).buffer;
+        ], 16);
+        var buffer = sharedArray.buffer;
         resultPromise = window.ParallelMatrixMultiplication.productParallel(buffer, 4);
       });
 
@@ -36,7 +37,7 @@ describe('ParallelMatrixMultiplication', function() {
         var result;
         beforeEach(function(done) {
           resultPromise.then(function(buffer) {
-            result = new Float64Array(buffer, 32 * Float64Array.BYTES_PER_ELEMENT, 16);
+            result = new SharedFloat64Array(buffer, 32 * SharedFloat64Array.BYTES_PER_ELEMENT, 16);
             done();
           });
         });

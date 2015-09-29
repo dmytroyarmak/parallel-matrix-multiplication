@@ -21,21 +21,13 @@
         };
 
         worker.postMessage({
+          buffer: buffer,
           p: p,
           n: n,
-          buffer: buffer,
           size: size
-        });
+        }, [buffer]);
       });
-    })).then(function(resultChunks) {
-      var matrixSize = size * size;
-      var resultChunkSize = matrixSize / n;
-      var result = new Float64Array(buffer, matrixSize * 2 * Float64Array.BYTES_PER_ELEMENT, matrixSize);
-
-      resultChunks.forEach(function(resultChunk, p) {
-        result.set(resultChunk, resultChunkSize * p);
-      });
-
+    })).then(function() {
       return buffer;
     });
   }

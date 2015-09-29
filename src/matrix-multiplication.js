@@ -13,9 +13,9 @@
     var iStart = p * size / n;
     var iEnd = (p + 1) * size / n;
     var matrixSize = size * size;
-    var matrixA = new Float64Array(buffer, 0, matrixSize);
-    var matrixB = new Float64Array(buffer, matrixA.byteLength , matrixSize);
-    var result = new Float64Array(buffer, matrixA.byteLength + matrixB.byteLength, matrixSize);
+    var matrixA = new SharedFloat64Array(buffer, 0, matrixSize);
+    var matrixB = new SharedFloat64Array(buffer, matrixA.byteLength , matrixSize);
+    var result = new SharedFloat64Array(buffer, matrixA.byteLength + matrixB.byteLength, matrixSize);
     var resultCell;
 
     for (i = iStart; i < iEnd; i += 1) {
@@ -32,7 +32,7 @@
   function generate (size) {
     var numberOfValuesInMatrix = size * size;
     var numberOfValuesToGenerate = numberOfValuesInMatrix * 2;
-    var matrix = new Float64Array(numberOfValuesInMatrix * 3);
+    var matrix = new SharedFloat64Array(numberOfValuesInMatrix * 3);
     var i;
 
     for(i = 0; i < numberOfValuesToGenerate; i += 1) {
