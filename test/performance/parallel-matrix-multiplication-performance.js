@@ -10,11 +10,10 @@
     async: true,
     defer: true,
     setup: function() {
-      var matrixA = MatrixMultiplication.generate(100);
-      var matrixB = MatrixMultiplication.generate(100);
+      var buffer = MatrixMultiplication.generate(100);
     },
     fn: function(deferred) {
-      ParallelMatrixMultiplication.productParallel(matrixA, matrixB, 100).then(function() {
+      ParallelMatrixMultiplication.productParallel(buffer, 100).then(function() {
         deferred.resolve();
       });
     },

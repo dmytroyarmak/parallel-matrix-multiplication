@@ -17,7 +17,6 @@ module.exports = function(config) {
       {pattern: 'src/matrix-multiplication.js', watched: true, included: true, served: true},
       {pattern: 'src/parallel-matrix-multiplication.js', watched: true, included: true, served: true},
       {pattern: 'src/parallel-matrix-multiplication-worker.js', watched: true, included: false, served: true},
-      {pattern: 'src/parallel-matrix-multiplication-in-buffer-worker.js', watched: true, included: false, served: true},
       {pattern: 'src/parallel-matrix-multiplication.js', watched: true, included: true, served: true},
       'test/unit/*-spec.js'
     ],

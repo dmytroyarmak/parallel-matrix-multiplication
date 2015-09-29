@@ -1,12 +1,14 @@
 importScripts('matrix-multiplication.js');
 
 onmessage = function(e) {
-  var matrixA = e.data.matrixA;
-  var matrixB = e.data.matrixB;
+  var buffer = e.data.buffer;
   var size = e.data.size;
   var p = e.data.p;
   var n = e.data.n;
-  var result = new Float64Array((size * size) / n);
-  MatrixMultiplication.product(matrixA, matrixB, result, size, p, n);
-  postMessage(result);
+  var matrixSize = size * size;
+  var resultChunkSize = matrixSize / n;
+  var resultChunkOffset = (matrixSize * 2 + resultChunkSize * p) * Float64Array.BYTES_PER_ELEMENT;
+  var resultChunk = new Float64Array(buffer, resultChunkOffset, resultChunkSize);
+  MatrixMultiplication.product(buffer, size, p, n);
+  postMessage(resultChunk);
 };
