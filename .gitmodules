@@ -1,0 +1,3 @@
+[submodule "parlib-simple"]
+	path = parlib-simple
+	url = git@github.com:lars-t-hansen/parlib-simple.git
