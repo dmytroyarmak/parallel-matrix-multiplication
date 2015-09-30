@@ -3,22 +3,16 @@
 
   var MatrixMultiplication = {
     product: product,
-    generate: generate
+    fillWithRandomValues: fillWithRandomValues
   };
 
-  function product (buffer, size, p, n) {
-    p = p || 0;
-    n = n || 1;
+  function product (matrixA, matrixB, result, size, fromRow, toRow) {
+    fromRow = fromRow || 0;
+    toRow = toRow || size;
     var i, j, k;
-    var iStart = p * size / n;
-    var iEnd = (p + 1) * size / n;
-    var matrixSize = size * size;
-    var matrixA = new SharedFloat64Array(buffer, 0, matrixSize);
-    var matrixB = new SharedFloat64Array(buffer, matrixA.byteLength , matrixSize);
-    var result = new SharedFloat64Array(buffer, matrixA.byteLength + matrixB.byteLength, matrixSize);
     var resultCell;
 
-    for (i = iStart; i < iEnd; i += 1) {
+    for (i = fromRow; i < toRow; i += 1) {
       for (j = 0; j < size; j += 1) {
         resultCell = 0;
         for (k = 0; k < size; k += 1) {
@@ -29,17 +23,11 @@
     }
   }
 
-  function generate (size) {
-    var numberOfValuesInMatrix = size * size;
-    var numberOfValuesToGenerate = numberOfValuesInMatrix * 2;
-    var matrix = new SharedFloat64Array(numberOfValuesInMatrix * 3);
+  function fillWithRandomValues (matrix) {
     var i;
-
-    for(i = 0; i < numberOfValuesToGenerate; i += 1) {
+    for(i = 0; i < matrix.length; i += 1) {
       matrix[i] = Math.random();
     }
-
-    return matrix.buffer;
   }
   root.MatrixMultiplication = MatrixMultiplication;
 }(this));

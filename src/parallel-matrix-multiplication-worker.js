@@ -1,10 +1,12 @@
-importScripts('matrix-multiplication.js');
+importScripts('../parlib-simple/src/asymmetric-barrier.js', '../parlib-simple/src/marshaler.js', '../parlib-simple/src/par.js', 'matrix-multiplication.js');
 
+var parJs = new WorkerPar();
 onmessage = function(e) {
-  var buffer = e.data.buffer;
-  var size = e.data.size;
-  var p = e.data.p;
-  var n = e.data.n;
-  MatrixMultiplication.product(buffer, size, p, n);
-  postMessage('DONE');
+  if (!parJs.dispatch(e.data)) {
+      console.log("Unknown: " + e.data);
+  }
 };
+
+function productChunk (fromRow, toRow, matrixA, matrixB, result, size) {
+  MatrixMultiplication.product(matrixA, matrixB, result, size, fromRow, toRow);
+}

@@ -14,15 +14,18 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      {pattern: 'parlib-simple/src/asymmetric-barrier.js', watched: true, included: true, served: true},
+      {pattern: 'parlib-simple/src/marshaler.js', watched: true, included: true, served: true},
+      {pattern: 'parlib-simple/src/par.js', watched: true, included: true, served: true},
       {pattern: 'src/matrix-multiplication.js', watched: true, included: true, served: true},
       {pattern: 'src/parallel-matrix-multiplication.js', watched: true, included: true, served: true},
       {pattern: 'src/parallel-matrix-multiplication-worker.js', watched: true, included: false, served: true},
-      {pattern: 'src/parallel-matrix-multiplication.js', watched: true, included: true, served: true},
       'test/unit/*-spec.js'
     ],
 
     proxies: {
-      '/src': '/base/src'
+      '/src': '/base/src',
+      '/parlib-simple': '/base/parlib-simple'
     },
 
 

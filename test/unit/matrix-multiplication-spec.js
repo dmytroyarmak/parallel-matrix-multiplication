@@ -9,29 +9,32 @@ describe('MatrixMultiplication', function() {
     });
 
     describe('for matrices nxm and mxp', function() {
-      var buffer;
+      var matrixA;
+      var matrixB;
       var result;
 
       beforeEach(function() {
-        var sharedArray = new SharedFloat64Array(16 * 3);
-        sharedArray.set([
+        matrixA = new Float64Array(16);
+        matrixA.set([
            1,  2,  3,  4,
            5,  6,  7,  8,
            9, 10, 11, 12,
           13, 14, 15, 16
         ]);
-        sharedArray.set([
+
+        matrixB = new Float64Array(16);
+        matrixB.set([
           17, 18, 19, 20,
           21, 22, 23, 24,
           25, 26, 27, 28,
           29, 30, 31, 32
-        ], 16);
-        buffer = sharedArray.buffer;
-        result = new SharedFloat64Array(buffer, 32 * SharedFloat64Array.BYTES_PER_ELEMENT, 16);
+        ]);
+
+        result = new Float64Array(16);
       });
 
       it('calculate product when n = p and n < m', function() {
-        window.MatrixMultiplication.product(buffer, 4);
+        window.MatrixMultiplication.product(matrixA, matrixB, result, 4);
         expect(result[0]).toBe(250);
         expect(result[1]).toBe(260);
         expect(result[2]).toBe(270);
@@ -51,7 +54,7 @@ describe('MatrixMultiplication', function() {
       });
 
       it('calculate product for 1 of 4', function() {
-        window.MatrixMultiplication.product(buffer, 4, 0, 4);
+        window.MatrixMultiplication.product(matrixA, matrixB, result, 4, 0, 1);
         expect(result[0]).toBe(250);
         expect(result[1]).toBe(260);
         expect(result[2]).toBe(270);
@@ -71,7 +74,7 @@ describe('MatrixMultiplication', function() {
       });
 
       it('calculate product for 2 of 4', function() {
-        window.MatrixMultiplication.product(buffer, 4, 1, 4);
+        window.MatrixMultiplication.product(matrixA, matrixB, result, 4, 1, 2);
         expect(result[0]).toBe(0);
         expect(result[1]).toBe(0);
         expect(result[2]).toBe(0);
@@ -91,7 +94,7 @@ describe('MatrixMultiplication', function() {
       });
 
       it('calculate product for 3 of 4', function() {
-        window.MatrixMultiplication.product(buffer, 4, 2, 4);
+        window.MatrixMultiplication.product(matrixA, matrixB, result, 4, 2, 3);
         expect(result[0]).toBe(0);
         expect(result[1]).toBe(0);
         expect(result[2]).toBe(0);
@@ -111,7 +114,7 @@ describe('MatrixMultiplication', function() {
       });
 
       it('calculate product for 4 of 4', function() {
-        window.MatrixMultiplication.product(buffer, 4, 3, 4);
+        window.MatrixMultiplication.product(matrixA, matrixB, result, 4, 3, 4);
         expect(result[0]).toBe(0);
         expect(result[1]).toBe(0);
         expect(result[2]).toBe(0);
@@ -132,15 +135,17 @@ describe('MatrixMultiplication', function() {
     });
   });
 
-  describe('generate', function() {
+  describe('fillWithRandomValues', function() {
     it('is a function', function() {
-      expect(window.MatrixMultiplication.generate).toEqual(jasmine.any(Function));
+      expect(window.MatrixMultiplication.fillWithRandomValues).toEqual(jasmine.any(Function));
     });
 
-    it('returns buffer with 3 matrices that has passed size and random values', function () {
-      var result = window.MatrixMultiplication.generate(3);
-      expect(result).toEqual(jasmine.any(SharedArrayBuffer));
-      expect(result.byteLength).toBe(3 * 3 * 3 * 8);
+    it('fill array with random values', function () {
+      var matrix = new Float64Array(10);
+      window.MatrixMultiplication.fillWithRandomValues(matrix);
+      for (var i = 0; i < matrix.length; i += 1) {
+        expect(matrix[i]).not.toBe(0);
+      }
     });
   });
 });

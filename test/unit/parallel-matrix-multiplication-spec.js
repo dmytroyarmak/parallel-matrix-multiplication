@@ -3,6 +3,22 @@ describe('ParallelMatrixMultiplication', function() {
     expect(window.ParallelMatrixMultiplication).toEqual(jasmine.any(Object));
   });
 
+  describe('alloc', function() {
+    it('returns two matrices with passed size', function() {
+      var result = window.ParallelMatrixMultiplication.alloc(4);
+      expect(result).toEqual(jasmine.any(Array));
+      expect(result.length).toBe(2);
+
+      var matrixA = result[0];
+      expect(matrixA).toEqual(jasmine.any(SharedFloat64Array));
+      expect(matrixA.length).toBe(16);
+
+      var matrixB = result[0];
+      expect(matrixB).toEqual(jasmine.any(SharedFloat64Array));
+      expect(matrixB.length).toBe(16);
+    });
+  });
+
   describe('productParallel', function() {
     it('is a function', function() {
       expect(window.ParallelMatrixMultiplication.productParallel).toEqual(jasmine.any(Function));
@@ -12,21 +28,25 @@ describe('ParallelMatrixMultiplication', function() {
       var resultPromise;
 
       beforeEach(function() {
-        var sharedArray = new SharedFloat64Array(16 * 3);
-        sharedArray.set([
+        var allocatedMatrices = window.ParallelMatrixMultiplication.alloc(4);
+        var matrixA = allocatedMatrices[0];
+        var matrixB = allocatedMatrices[1];
+
+        matrixA.set([
            1,  2,  3,  4,
            5,  6,  7,  8,
            9, 10, 11, 12,
           13, 14, 15, 16
         ]);
-        sharedArray.set([
+
+        matrixB.set([
           17, 18, 19, 20,
           21, 22, 23, 24,
           25, 26, 27, 28,
           29, 30, 31, 32
-        ], 16);
-        var buffer = sharedArray.buffer;
-        resultPromise = window.ParallelMatrixMultiplication.productParallel(buffer, 4);
+        ]);
+
+        resultPromise = window.ParallelMatrixMultiplication.productParallel(matrixA, matrixB, 4);
       });
 
       it('returns promise', function() {
@@ -35,9 +55,10 @@ describe('ParallelMatrixMultiplication', function() {
 
       describe('when promise is resolved', function() {
         var result;
+
         beforeEach(function(done) {
-          resultPromise.then(function(buffer) {
-            result = new SharedFloat64Array(buffer, 32 * SharedFloat64Array.BYTES_PER_ELEMENT, 16);
+          resultPromise.then(function(_result_) {
+            result = _result_;
             done();
           });
         });
