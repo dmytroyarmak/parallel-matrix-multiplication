@@ -16,6 +16,10 @@
       });
   }
 
+  function init () {
+    return initParJs().then(function() {});
+  }
+
   function initParJs () {
     initParJsPromise = initParJsPromise || new Promise(function(resolve) {
       var parJs = new MasterPar(parJsMemory, 0, numberOfWorkers, '/src/parallel-matrix-multiplication-worker.js', function() {
@@ -42,6 +46,7 @@
 
   var ParallelMatrixMultiplication = {
     productParallel: productParallel,
+    init: init,
     alloc: alloc
   };
 
