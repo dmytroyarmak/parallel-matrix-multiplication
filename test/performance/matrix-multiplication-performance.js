@@ -9,10 +9,15 @@
   var bench = new Benchmark('Matrix multiplication (size: 1000)', {
     async: true,
     setup: function() {
-      var buffer = MatrixMultiplication.generate(1000);
+      var SIZE = 1000;
+      var matrixA = new Float64Array(SIZE * SIZE);
+      var matrixB = new Float64Array(SIZE * SIZE);
+      var result = new Float64Array(SIZE * SIZE);
+      MatrixMultiplication.fillWithRandomValues(matrixA);
+      MatrixMultiplication.fillWithRandomValues(matrixB);
     },
     fn: function() {
-      MatrixMultiplication.product(buffer, 1000);
+      MatrixMultiplication.product(matrixA, matrixB, result, SIZE);
     },
     onCycle:function(e) {
       printToOutputNode('onCycle: ' + String(e.target));
